@@ -33,92 +33,71 @@ resultButton.setAttribute("value", "RESULT");
 calculatorForm.appendChild(resultButton);
 
 
-resultButton.addEventListener("click", giveMeResult);
+resultButton.addEventListener("click", addTwoNumbers);
 
 
-function giveMeResult(){
+function addTwoNumbers(){
 
-	checkForUniqueElements();
+	checkIfOutputMessagesDivsPresentOnPage();
 
-	let valueOneIsANumber = isValueANumber(inputFirst.value);
-	
-	if(!valueOneIsANumber){
+	let firstValueIsCorrect = true, secondValueIsCorrect = true,
+	parsedFirstInputValue,	parsedSecondInputValue;
+
+	try{
+		parsedFirstInputValue = new Decimal(inputFirst.value);
+	}
+	catch(err){
 		let errorDiv1 = document.createElement("div");
 		errorDiv1.setAttribute("style", "text-align:center; color:red;");
 		errorDiv1.setAttribute("id", "error1");
 		errorDiv1.setAttribute("class", "error-message");
 		errorDiv1.textContent = "Value is not a number";
 		mainFirstDiv.appendChild(errorDiv1);
+		firstValueIsCorrect = false;
 	}
-	
-	let valueTwoIsANumber = isValueANumber(inputSecond.value);
 
-	if(!valueTwoIsANumber){
+	try{
+		parsedSecondInputValue = new Decimal(inputSecond.value);
+	}
+	catch(err){
 		let errorDiv2 = document.createElement("div");
 		errorDiv2.setAttribute("style", "text-align:center; color:red;");
 		errorDiv2.setAttribute("id", "error2");
 		errorDiv2.setAttribute("class", "error-message");
 		errorDiv2.textContent = "Value is not a number";
 		mainSecondDiv.appendChild(errorDiv2);
-	}
-	
-	if(inputFirst.value.length === 0 && inputSecond.value.length === 0){
-		let resultMessage = document.createElement("div");
-		resultMessage.setAttribute("id", "empty-form-error");
-		resultMessage.setAttribute("style", "text-align:center; margin-top:10%; color:orange;");
-		resultMessage.textContent = "Please fill the input forms";
-		calculatorForm.appendChild(resultMessage);
-		return undefined;
+		secondValueIsCorrect = false;
 	}
 
-	if(valueOneIsANumber && valueTwoIsANumber){
+	if(!firstValueIsCorrect || !secondValueIsCorrect){
+		return undefined;
+	}else if(firstValueIsCorrect && secondValueIsCorrect){	
 		let resultMessage = document.createElement("div");
 		resultMessage.setAttribute("id", "result");
 		resultMessage.setAttribute("style", "text-align:center; margin-top:10%; color:blue;");
-		resultMessage.textContent = parseFloat(inputFirst.value) + parseFloat(inputSecond.value);
+		resultMessage.textContent = parsedFirstInputValue.plus(parsedSecondInputValue);
 		calculatorForm.appendChild(resultMessage);
 	}
+	
 
-	function isValueANumber(inputString){
+	function checkIfOutputMessagesDivsPresentOnPage(){
 
-		for(let g in inputString){
-			if((inputString.charCodeAt(g) >= 48 && inputString.charCodeAt(g) <= 57)
-			 || (inputString.charCodeAt(g) === 46) || (inputString.charCodeAt(g) === 45)
-			  || (inputString.charCodeAt(g) === 43)){
-				continue;
-			}else{
-				return false;
-			}
-			  
-		}
-		return true; 
-	}
+		let isTheResultDivAlreadyPresent = document.getElementById("result");
 
-
-	function checkForUniqueElements(){
-
-		let isTheResultDivAlreadyExist = document.getElementById("result");
-
-		if(isTheResultDivAlreadyExist){
-		isTheResultDivAlreadyExist.remove();
+		if(isTheResultDivAlreadyPresent){
+			isTheResultDivAlreadyPresent.remove();
 		}
 
-		let isTheFirstErrorDivExist = document.getElementById("error1");
+		let isTheFirstErrorDivPresent = document.getElementById("error1");
 
-		if(isTheFirstErrorDivExist){
-			isTheFirstErrorDivExist.remove();
+		if(isTheFirstErrorDivPresent){
+			isTheFirstErrorDivPresent.remove();
 		}
 
-		let isTheSecondErrorDivExist = document.getElementById("error2");
+		let isTheSecondErrorDivPresent = document.getElementById("error2");
 
-		if(isTheSecondErrorDivExist){
-			isTheSecondErrorDivExist.remove();
-		}
-
-		let isTheInputFormsErrorDivExist = document.getElementById("empty-form-error");
-
-		if(isTheInputFormsErrorDivExist){
-			isTheInputFormsErrorDivExist.remove();
+		if(isTheSecondErrorDivPresent){
+			isTheSecondErrorDivPresent.remove();
 		}
 	}
 }	
