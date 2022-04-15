@@ -69,9 +69,13 @@ function addTwoNumbers(){
 		secondValueIsCorrect = false;
 	}
 
+	checkInputsForNaNAndInfinity();
+
 	if(!firstValueIsCorrect || !secondValueIsCorrect){
 		return undefined;
-	}else if(firstValueIsCorrect && secondValueIsCorrect){	
+	}
+
+	if(firstValueIsCorrect && secondValueIsCorrect){	
 		let resultMessage = document.createElement("div");
 		resultMessage.setAttribute("id", "result");
 		resultMessage.setAttribute("style", "text-align:center; margin-top:10%; color:blue;");
@@ -99,6 +103,36 @@ function addTwoNumbers(){
 		if(isTheSecondErrorDivPresent){
 			isTheSecondErrorDivPresent.remove();
 		}
+	}
+
+	function checkInputsForNaNAndInfinity(){
+		if(!firstValueIsCorrect){
+			//NOOP
+		}else if(firstValueIsCorrect){
+			if(isNaN(parsedFirstInputValue) || !isFinite(parsedFirstInputValue)){
+				let errorDiv1 = document.createElement("div");
+				errorDiv1.setAttribute("style", "text-align:center; color:red;");
+				errorDiv1.setAttribute("id", "error1");
+				errorDiv1.setAttribute("class", "error-message");
+				errorDiv1.textContent = "Value is not a number";
+				mainFirstDiv.appendChild(errorDiv1);
+				firstValueIsCorrect = false;
+		}
+		}
+
+		if(!secondValueIsCorrect){
+			//NOOP
+		}else if(secondValueIsCorrect){
+			if(isNaN(parsedSecondInputValue) || !isFinite(parsedSecondInputValue)){
+				let errorDiv2 = document.createElement("div");
+				errorDiv2.setAttribute("style", "text-align:center; color:red;");
+				errorDiv2.setAttribute("id", "error2");
+				errorDiv2.setAttribute("class", "error-message");
+				errorDiv2.textContent = "Value is not a number";
+				mainSecondDiv.appendChild(errorDiv2);
+				secondValueIsCorrect = false;
+		}
+	}
 	}
 }	
 };
